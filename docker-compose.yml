@@ -1,0 +1,105 @@
+version: '3'
+services:  
+  frontend:
+    build:
+     context: .
+     dockerfile: DockerfileFrontend
+    image: ldev/frontend
+    container_name: frontend
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: frontend
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    volumes:
+      - ./frontend:/var/www      
+    networks:
+      - fullstack-network
+
+  backend:
+    build:
+      context: .
+      dockerfile: DockerfileBackend
+    image: ldev/backend
+    container_name: backend
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: backend
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    volumes:
+      - ./backend:/var/www
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - fullstack-network
+
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    environment:
+     SERVICE_NAME: webserver
+     SERIVE_TAGS: dev
+    restart: unless-stopped
+    tty: true
+    ports:    
+      - "8000:8000"
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - fullstack-network
+
+  db:
+    image: mysql:5.7.22
+    container_name: db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_ROOT_PASSWORD: root
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - ./database:/var/lib/mysql/
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - fullstack-network
+
+   phpmyadmin:
+    image: phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    tty: true
+    ports:
+      - "8080:80"
+    environment:
+      PMA_ARBITRARY: 1
+      PMA_HOST: db
+      PMA_HOST: 3306
+      PMA_USER: laravel
+      PMA_PASSWORD: root
+    network:
+      - fullstack-network
+
+    redis:
+     image: redis
+      container_name: redis
+      restart: always
+      tty: true
+      ports:
+       - "6379:6379"
+      environment:
+       - REDIS_PASSWORD: root
+      network:
+       - fullstack-network
+
+#dockerNetworks
+networks:
+  fullstack-network:
+    driver: bridge
