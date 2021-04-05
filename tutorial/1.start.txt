@@ -1,0 +1,18 @@
+git clone https://github.com/litondev/docker-compose-laravel-nuxt docker-compose-laravel-nuxt
+
+mkdir development
+
+cd development
+
+mkdir app php nginx mysql database
+mkdir app/frontend
+mkdir app/backend
+
+git clone https://github.com/litondev/docker-laravel-7-nuxt app
+
+cp ./docker-compose-laravel-nuxt/mysql/my.cnf ./development/mysql/my.cnf
+cp ./docker-compose-laravel-nuxt/php/local.ini ./development/php/local.ini
+cp ./docker-compose-laravel-nuxt/nginx/conf.d/fullstack.conf ./development/nginx/conf.d/fullstack.conf
+cp ./docker-compose-laravel-nuxt/docker-compose.yml ./development/docker-compose.yml
+cp ./docker-compose-laravel-nuxt/DockfileFrontend ./development/DockerfileFrontend
+cp ./docker-compose-laravel-nuxt/DockerfileBackend ./development/DockerfileBackend

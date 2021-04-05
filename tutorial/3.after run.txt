@@ -1,0 +1,24 @@
+docker ps
+
+# pastikan semua jalan
+
+cp ./app/backend/.env.example ./app/backend/.env
+
+cp ./app/frontend/.env.example ./app/frontend/.env
+
+docker-compose exec -u root backend php artisan key:generate
+
+docker-compose exec -u root backend php artisan config:cache
+
+docker-compose exec -u root backend chmod 777 -R public/*
+
+docker-compose exec -u root backend chmod 777 -R storage/*
+
+# membuat user di mysql
+docker-compose exec -u root db bash
+ mysql -u root -p
+ GRANT ALL ON laravel.* TO 'laraveluser'@'%' IDENTIFIED BY 'your_laravel_db_password';
+ FLUSH PRIVILEGES;
+ EXIT
+
+docker-compose exec -u root backend php artisan migrate:fresh --seed

@@ -11,11 +11,11 @@ services:
   environment:
    SERVICE_NAME: frontend
    SERVICE_TAGS: dev
-  working_dir: /var/www
+  working_dir: /var/www/frontend
   volumes:
-   - ./frontend:/var/www
+   - ./app/frontend:/var/www/frontend
   networks:
-   - frontend
+   - fullstack
 
  backend:
   build:
@@ -28,13 +28,12 @@ services:
   environment:
    SERVICE_NAME: backend
    SERVICE_TAGS: dev
-  working_dir: /var/www
+  working_dir: /var/www/backend
   volumes:
-   - ./backend:/var/www
+   - ./app/backend:/var/www/backend  
    - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
   networks:
-   - frontend
-   - backend
+   - fullstack
 
  webserver:
   image: nginx:alpine
@@ -49,11 +48,11 @@ services:
    - "80:80"
    - "443:443"
   volumes:
-   - ./:/var/www
+   - ./app/frontend:/var/www/frontend
+   - ./app/backend:/var/www/backend
    - ./nginx/conf.d/:/etc/nginx/conf.d/
   networks:
-   - frontend
-   - backend
+   - fullstack
 
  db:
   image: mysql:5.7.22
@@ -71,7 +70,7 @@ services:
    - ./database:/var/lib/mysql/
    - ./mysql/my.cnf:/etc/mysql/my.cnf
   networks:
-   - backend
+   - fullstack
 
  phpmyadmin:
   image: phpmyadmin
@@ -83,11 +82,11 @@ services:
   environment:
    PMA_ARBITRARY: 1
    PMA_HOST: db
-   PMA_HOST: 3306
-   PMA_USER: laravel
+   PMA_PORT: 3306
+   PMA_USER: root
    PMA_PASSWORD: root
   networks:
-   - backend
+   - fullstack
 
  redis:
   image: redis|alpine
@@ -99,11 +98,8 @@ services:
   environment:
    REDIS_PASSWORD: root
   networks:
-   - frontend
-   - backend
+   - fullstack
 
 networks:
- frontend:
-  driver: bridge
- backend:
+ fullstack:
   driver: bridge

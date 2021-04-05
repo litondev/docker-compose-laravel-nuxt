@@ -1,8 +1,8 @@
 FROM node:alpine
 
-WORKDIR /var/www
+WORKDIR /var/www/frontend
 
-RUN apt-get update && apt-get install -y \    
+RUN apt-get update && apt-get install -y \
     locales \
     zip \
     vim \
@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
 
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-COPY ./frontend /var/www
+COPY ./app/frontend /var/www/frontend
 
 RUN npm-install
 
