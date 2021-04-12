@@ -1,0 +1,11 @@
+FROM node:latest
+
+WORKDIR /var/www/laravel-echo-server
+
+COPY ./laravel-echo-server/laravel-echo-server.json /var/www/laravel-echo-server/laravel-echo-server.json
+
+RUN npm install laravel-echo-server -g
+
+EXPOSE 6001
+
+CMD ["laravel-echo-server start"]
