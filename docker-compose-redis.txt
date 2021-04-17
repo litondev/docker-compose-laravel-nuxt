@@ -1,0 +1,11 @@
+ redis:
+  image: redis:alpine
+  container_name: redis
+  restart: always
+  tty: true
+  ports:
+   - "6379:6379"
+  environment:
+   REDIS_PASSWORD: root
+  networks:
+   - fullstack

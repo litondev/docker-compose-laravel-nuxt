@@ -1,9 +1,6 @@
 version: '3'
 services:
  frontend:
-  build:
-   context: .
-   dockerfile: DockerfileFrontend
   image: ldev/frontend
   container_name: frontend
   restart: unless-stopped
@@ -14,13 +11,13 @@ services:
   working_dir: /var/www/frontend
   volumes:
    - ./app/frontend:/var/www/frontend
+   - ./after/frontend.sh:/usr/local/bin/frontend.sh
   networks:
    - fullstack
+  command:
+   - frontend.sh
 
- backend:
-  build:
-   context: .
-   dockerfile: DockerfileBackend
+ backend:  
   image: ldev/backend
   container_name: backend
   restart: unless-stopped
@@ -35,23 +32,6 @@ services:
   networks:
    - fullstack
 
- laravelechoserver:
-  build:
-   context: .
-   dockerfile: DockerfileLaravelEchoServer
-  image: ldev/laravelechoserver
-  container_name: laravelechoserver
-  restart: unless-stopped
-  tty: true
-  environment:
-    SERVICE_NAME: laravelechoserver
-    SERIVE_TAGS: dev
-  working_dir: /var/www/laravel-echo-server
-  volumes:
-   - ./laravel-echo-server/laravel-echo-server.json:/var/www/laravel-echo-server
-  networks:
-   - fullstack
-
  webserver:
   image: nginx:alpine
   container_name: webserver
@@ -63,9 +43,11 @@ services:
   ports:
    - "8000:8000"
    - "80:80"
+   - "5000:5000"
   volumes:
    - ./app/frontend:/var/www/frontend
    - ./app/backend:/var/www/backend
+   - ./app/error-page:/var/www/error-page
    - ./nginx/conf.d/:/etc/nginx/conf.d/
   networks:
    - fullstack
@@ -85,34 +67,6 @@ services:
   volumes:
    - ./database:/var/lib/mysql/
    - ./mysql/my.cnf:/etc/mysql/my.cnf
-  networks:
-   - fullstack
-
- phpmyadmin:
-  image: phpmyadmin
-  container_name: phpmyadmin
-  restart: always
-  tty: true
-  ports:
-   - "8080:80"
-  environment:
-   PMA_ARBITRARY: 1
-   PMA_HOST: db
-   PMA_PORT: 3306
-   PMA_USER: root
-   PMA_PASSWORD: root
-  networks:
-   - fullstack
-
- redis:
-  image: redis:alpine
-  container_name: redis
-  restart: always
-  tty: true
-  ports:
-   - "6379:6379"
-  environment:
-   REDIS_PASSWORD: root
   networks:
    - fullstack
 

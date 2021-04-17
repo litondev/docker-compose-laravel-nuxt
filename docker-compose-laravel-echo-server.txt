@@ -1,0 +1,16 @@
+ laravelechoserver:  
+  image: ldev/laravelechoserver
+  container_name: laravelechoserver
+  restart: unless-stopped
+  tty: true
+  environment:
+    SERVICE_NAME: laravelechoserver
+    SERIVE_TAGS: dev
+  working_dir: /var/www/laravel-echo-server
+  volumes:
+   - ./laravel-echo-server/laravel-echo-server.json:/var/www/laravel-echo-server/laravel-echo-server.json
+   - ./after/laravel-echo-server-cmd.sh:/usr/local/bin/laravel-echo-server-cmd.sh
+  networks:
+   - fullstack
+  command:
+   - laravel-echo-server-cmd.sh

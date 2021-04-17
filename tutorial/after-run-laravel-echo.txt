@@ -1,0 +1,7 @@
+cp ./laravel-echo-server/laravel-echo-server.json ./var/www/laravel-echo-server/laravel-echo-server.json
+
+docker-compose exec -u root laravelechoserver npm install laravel-echo-server -g
+
+docker-compose exec -u root laravelechoserver laravel-echo-server start
+
+docker-compose laravelechoserver restart

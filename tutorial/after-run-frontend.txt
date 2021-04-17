@@ -1,0 +1,11 @@
+cp ./app/frontend/.env.example ./app/frontend/.env
+
+docker-compose exec -u root frontend npm install
+
+docker-compose exec -u root frontend npm install pm2 -g
+
+docker-compose exec -u root frontend npm run build
+
+docker-compose exex -u root frontend pm2 start
+
+docker-compose frontend restart

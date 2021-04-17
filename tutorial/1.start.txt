@@ -7,6 +7,10 @@ cd development
 mkdir app php nginx mysql database
 mkdir app/frontend
 mkdir app/backend
+mkdir app/error-page
+# mkdir app/admin
+# mkdir app/images
+# mkdir app/background
 
 git clone https://github.com/litondev/docker-laravel-7-nuxt app
 
@@ -16,3 +20,4 @@ cp ./docker-compose-laravel-nuxt/nginx/conf.d/fullstack.conf ./development/nginx
 cp ./docker-compose-laravel-nuxt/docker-compose.yml ./development/docker-compose.yml
 cp ./docker-compose-laravel-nuxt/DockfileFrontend ./development/DockerfileFrontend
 cp ./docker-compose-laravel-nuxt/DockerfileBackend ./development/DockerfileBackend
+cp ./docker-compose-laravel-nuxt/DockerfileLaravelEchoServer ./development/DockerfileLaravelEchoServer

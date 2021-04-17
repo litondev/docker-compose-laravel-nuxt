@@ -1,0 +1,15 @@
+cp ./app/backend/.env.example ./app/backend/.env
+
+docker-compose exec -u root backend composer update
+
+docker-compose exec -u root backend php artisan key:generate
+
+docker-compose exec -u root backend php artisan config:cache
+
+docker-compose exec -u root backend chmod 777 -R /var/www/public
+
+docker-compose exec -u root backend chmod 777 -R /var/www/storage
+
+docker-compose exec -u root backend php artisan migrate:fresh --seed
+
+docker-compose backend restart

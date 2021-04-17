@@ -1,0 +1,15 @@
+ phpmyadmin:
+  image: phpmyadmin
+  container_name: phpmyadmin
+  restart: always
+  tty: true
+  ports:
+   - "8080:80"
+  environment:
+   PMA_ARBITRARY: 1
+   PMA_HOST: db
+   PMA_PORT: 3306
+   PMA_USER: root
+   PMA_PASSWORD: root
+  networks:
+   - fullstack
